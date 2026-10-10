@@ -105,10 +105,11 @@ def generate_maze(width: int, height: int) -> list[list[int]]:
     return maze
 
 
-maze = generate_maze(10, 10)
+if __name__ == "__main__":
+    maze = generate_maze(10, 10)
 
-for row in maze:
-    line = ""
-    for cell in row:
-        line += format(cell, "X")
-    print(line)
+    for row in maze:
+        line = ""
+        for cell in row:
+            line += format(cell, "X")
+        print(line)
