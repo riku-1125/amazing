@@ -3,7 +3,6 @@ from enum import Enum
 
 from maze_gen import generate_maze
 
-MAZE: list[list[int]] = []
 candidates: deque[tuple[tuple[int, int], str]] = deque()
 visited: set[tuple] = set()
 
@@ -15,8 +14,8 @@ class Direction(Enum):
     WEST = 8
     
 
-def find_next_candidates(y: int, x: int, path: str) -> None:
-    wall_direction = MAZE[y][x]
+def find_next_candidates(maze: list[list[int]], y: int, x: int, path: str) -> None:
+    wall_direction = maze[y][x]
 
     if wall_direction >= Direction.WEST.value:
         wall_direction -= Direction.WEST.value
@@ -39,22 +38,23 @@ def find_next_candidates(y: int, x: int, path: str) -> None:
         candidates.append([(y - 1, x), path + "N"])
 
 
-def solve_maze(start: tuple[int, int], end: tuple[int, int]) -> str:
+def solve_maze(maze: list[list[int]], start: tuple[int, int], end: tuple[int, int]) -> str:
+    x, y = start
     candidates.append([start, ""])
     (y, x), path = candidates.popleft()
     visited.add(start)
-    find_next_candidates(y, x, path)
+    find_next_candidates(maze, y, x, path)
     while candidates:
         (y, x), path = candidates.popleft()
         visited.add((y, x))
         if (y, x) == end:
             return path
-        find_next_candidates(y, x, path)
+        find_next_candidates(maze, y, x, path)
     
     return "No path from start to goal"
 
 
 if __name__ == "__main__":
     MAZE = generate_maze(3, 3)
-    path = solve_maze((0, 0), (2, 2))
+    path = solve_maze(MAZE, (0, 0), (2, 2))
     print(f"path: {path}")
