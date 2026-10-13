@@ -90,12 +90,106 @@ def open_wall(
         maze[next_y][next_x] &= ~east
 
 
+def get_deadend_candidate(
+    deadend_candidates: list[tuple[int, int]],
+    maze: list[list[int]],
+    blocked: set[tuple[int, int]],
+    x: int,
+    y: int,
+    width: int,
+    height: int
+) -> None:
+    """範囲内で行き止まりの候補を探す
+
+    Args:
+        deadend_candidates: 候補を追加するリスト
+        maze: 迷路の盤面
+        blocked: 到達禁止座標
+        x: 現在地のx座標
+        y: 現在地のy座標
+        width: 生成する迷路の横幅
+        height: 生成する迷路の縦幅
+
+    """
+    north = 1
+    east = 2
+    south = 4
+    west = 8
+    if (
+        x + 1 < width
+        and (x + 1, y) not in blocked
+        and maze[y][x] & east
+    ):
+        deadend_candidates.append((x + 1, y))
+    if (
+        x - 1 >= 0
+        and (x - 1, y) not in blocked
+        and maze[y][x] & west
+    ):
+        deadend_candidates.append((x - 1, y))
+    if (
+        y + 1 < height
+        and (x, y + 1) not in blocked
+        and maze[y][x] & south
+    ):
+        deadend_candidates.append((x, y + 1))
+    if (
+        y - 1 >= 0
+        and (x, y - 1) not in blocked
+        and maze[y][x] & north
+    ):
+        deadend_candidates.append((x, y - 1))
+
+
+def is_3x3_space(maze: list[list[int]], top: int, left: int) -> bool:
+    """3*3のスペースがあるか判断する
+
+    Args:
+        maze: 生成された迷路の盤面
+        top: 調べる領域の左上のy座標
+        left: 調べる領域の左上のx座標
+
+    Returns:
+        左上の視点から右下に3*3の空白があればTrue、なければFalse
+    """
+    east = 2
+    south = 4
+    for dy in range(3):
+        for dx in range(2):
+            if maze[top + dy][left + dx] & east:
+                return False
+    for dy in range(2):
+        for dx in range(3):
+            if maze[top + dy][left + dx] & south:
+                return False
+    return True
+
+
+def fix_3x3_space(maze: list[list[int]]) -> None:
+    """3*3の空白が迷路に存在した時、その領域の中心の右側の位置の壁を立てる
+    渡されたmazeを直接変更する
+
+    Args:
+        maze: 生成された迷路の盤面
+    """
+    east = 2
+    west = 8
+    height = len(maze)
+    width = len(maze[0])
+    for top in range(height - 2):
+        for left in range(width - 2):
+            if is_3x3_space(maze, top, left):
+                maze[top + 1][left + 1] |= east
+                maze[top + 1][left + 2] |= west
+
+
 def generate_maze(
     width: int,
     height: int,
     entry: tuple[int, int],
     exit: tuple[int, int],
     seed: int | None = None,
+    perfect: bool = True
 ) -> list[list[int]]:
     """迷路生成関数
 
@@ -105,6 +199,7 @@ def generate_maze(
         entry: 迷路のスタート位置
         exit: 迷路のゴール
         seed: シード値.Noneならランダムで、同じシード値なら同じ迷路が生成されるはず
+        perfect: True->完全迷路、False->不完全迷路
 
     Returns:
         生成した迷路の二次元リスト
@@ -154,7 +249,7 @@ def generate_maze(
         # 現在地を取得
         x, y = route[-1]
         # 現在地が変わるたびに、候補を空から集め直す。
-        candidates = []
+        candidates: list[tuple[int, int]] = []
         get_candidate(candidates, arrived, blocked, x, y, width, height)
         if not candidates:
             # 未訪問の隣マスがなければ、現在地を取り除いて一つ前へ戻る。
@@ -165,11 +260,32 @@ def generate_maze(
             route.append((next_x, next_y))
             arrived.add((next_x, next_y))
             open_wall(maze, x, y, next_x, next_y)
+    if not perfect:
+        for y in range(height):
+            for x in range(width):
+                if maze[y][x].bit_count() == 3:
+                    deadend_candidates: list[tuple[int, int]] = []
+                    get_deadend_candidate(
+                        deadend_candidates,
+                        maze,
+                        blocked,
+                        x,
+                        y,
+                        width,
+                        height
+                    )
+                    if deadend_candidates:
+                        next_x, next_y = random_generator.choice(
+                            deadend_candidates
+                        )
+                        open_wall(maze, x, y, next_x, next_y)
+        fix_3x3_space(maze)
+
     return maze
 
 
 if __name__ == "__main__":
-    maze = generate_maze(10, 10, (0, 0), (9, 9), 42)
+    maze = generate_maze(49, 49, (0, 0), (48, 48), perfect=False)
 
     for row in maze:
         line = ""
