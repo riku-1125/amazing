@@ -126,12 +126,12 @@ def read_conf(filename: str) -> Config:
 if __name__ == "__main__":
     try:
         conf = read_conf("./config.txt")
-        print(conf.width)
-        print(conf.height)
-        print(conf.entry)
-        print(conf.exit)
-        print(conf.perfect)
-        print(conf.output_file)
-        print(conf.seed)
+        print(f"width: {conf.width}")
+        print(f"height: {conf.height}")
+        print(f"entry: {conf.entry}")
+        print(f"exit: {conf.exit}")
+        print(f"perfect: {conf.perfect}")
+        print(f"output_file: {conf.output_file}")
+        print(f"seed: {conf.seed}")
     except ValueError as e:
         print(e)
