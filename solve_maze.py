@@ -81,7 +81,6 @@ def solve_maze(
     candidates: deque[tuple[tuple[int, int], str]] = deque()
     visited: set[tuple[int, int]] = set()
 
-    # 引数は(x, y)で受け取り、この関数の中では(y, x)に反転して使う
     start_x, start_y = start
     start_point: tuple[int, int] = (start_y, start_x)
     end_x, end_y = end
