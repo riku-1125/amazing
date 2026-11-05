@@ -86,7 +86,13 @@ def read_conf(filename: str) -> Config:
         "PERFECT",
         "OUTPUT_FILE"
     )
+    _ALLOWED_KEYS = _REQUIRED_KEYS + ("SEED",)
+
     values = _read_values(filename)
+    notallowed = [key for key in values if key not in _ALLOWED_KEYS]
+    if notallowed:
+        raise ValueError(f"許可されてない設定項目があります: {', '.join(notallowed)}")
+
     missing = [key for key in _REQUIRED_KEYS if key not in values]
     if missing:
         raise ValueError(f"必須項目がありません: {', '.join(missing)}")
