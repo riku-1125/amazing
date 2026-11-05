@@ -1,4 +1,5 @@
 """迷路の設定ファイルを読み、型付きの設定値に変換するモジュール"""
+import sys
 
 
 class Config:
@@ -134,4 +135,5 @@ if __name__ == "__main__":
         print(f"output_file: {conf.output_file}")
         print(f"seed: {conf.seed}")
     except (ValueError, OSError) as e:
-        print(e)
+        print(e, file=sys.stderr)
+        sys.exit(1)
