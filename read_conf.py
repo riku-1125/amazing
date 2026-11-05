@@ -133,5 +133,5 @@ if __name__ == "__main__":
         print(f"perfect: {conf.perfect}")
         print(f"output_file: {conf.output_file}")
         print(f"seed: {conf.seed}")
-    except ValueError as e:
+    except (ValueError, OSError) as e:
         print(e)
