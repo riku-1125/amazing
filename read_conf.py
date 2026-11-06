@@ -26,7 +26,17 @@ class Config:
 
 
 def _read_values(filename: str) -> dict[str, str]:
-    """空行とコメントを飛ばし、設定を文字列の辞書として返す。"""
+    """空行とコメントを飛ばし、文字列の辞書として整形してそれを返す。
+
+    Args:
+        filename:読み込む設定ファイルのパス
+
+    Returns:
+        辞書形式の設定
+
+    Raises:
+        ValueError: 設置の書式が不正、もしくはキーが重複していた場合
+    """
     values: dict[str, str] = {}
     with open(filename, encoding="utf-8") as file:
         for number, line in enumerate(file, start=1):
@@ -44,7 +54,18 @@ def _read_values(filename: str) -> dict[str, str]:
 
 
 def _parse_int(key: str, value: str) -> int:
-    """設定値を整数に変換し、失敗時は項目名を伝える。"""
+    """設定値を整数に変換し、失敗時は項目名を伝える。
+
+    Args:
+        key: 項目名
+        value: 整数が想定される文字列キー
+
+    Returns:
+        整数
+
+    Raises:
+        ValueError: 引数の文字列が整数に変換できな買った場合。
+    """
     try:
         return int(value)
     except ValueError:
@@ -54,7 +75,20 @@ def _parse_int(key: str, value: str) -> int:
 def _parse_point(
     key: str, value: str, width: int, height: int
 ) -> tuple[int, int]:
-    """盤面の範囲内にある座標を返す。"""
+    """盤面の範囲内にある座標を返す。
+
+    Args:
+        key: 項目名
+        value: 座標が想定される項目の中身
+        width: 迷路の盤面の横幅
+        height: 迷路の盤面の縦幅
+
+    Returns:
+        座標のタプル
+
+    Raises:
+        ValueError: 書式や平面座標として不正な場合。
+    """
     parts = value.split(",")
     if len(parts) != 2:
         raise ValueError(f"{key} は x,y の形式で指定してください。")
@@ -72,7 +106,7 @@ def read_conf(filename: str) -> Config:
         filename: 設定ファイルのパス。
 
     Returns:
-        各設定値を利用する型に変換した Config。
+        各設定値を利用する型に変換したConfig。
 
     Raises:
         OSError: ファイルを開けない、または読み込めない場合。
