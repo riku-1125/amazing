@@ -2,20 +2,9 @@
 
 壁を+---+と|で、スタートをs、ゴールをg、経路を*、"42"を###で描画する。
 """
-from enum import IntEnum
+from constants import Direction
 from maze_gen import generate_maze
 from solve_maze import solve_maze
-
-
-class Direction(IntEnum):
-    """壁の方向を表すビットの値
-
-    マスの値は、閉じている壁の値の合計で表す。
-    """
-    NORTH = 1
-    EAST = 2
-    SOUTH = 4
-    WEST = 8
 
 
 def print_line(width: int) -> None:
