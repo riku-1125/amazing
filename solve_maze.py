@@ -5,20 +5,9 @@
 
 """
 from collections import deque
-from enum import IntEnum
+from constants import Direction
 
 from maze_gen import generate_maze
-
-
-class Direction(IntEnum):
-    """壁の方向を表すビットの値
-
-    マスの値は、閉じている壁の値の合計で表す。
-    """
-    NORTH = 1
-    EAST = 2
-    SOUTH = 4
-    WEST = 8
 
 
 def find_next_candidates(
