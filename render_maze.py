@@ -2,12 +2,12 @@
 
 壁を+---+と|で、スタートをs、ゴールをg、経路を*、"42"を###で描画する。
 """
-from constants import Direction
+from constants import Direction, RESET
 from maze_gen import generate_maze
 from solve_maze import solve_maze
 
 
-def print_line(width: int) -> None:
+def print_line(width: int, wall_color: str) -> None:
     """迷路の一番下の壁の線を表示する
 
     Args:
@@ -17,7 +17,7 @@ def print_line(width: int) -> None:
 
     for _ in range(width):
         line += "---+"
-    print(line)
+    print(f"{wall_color}{line}{RESET}")
 
 
 def render_maze(
@@ -27,7 +27,8 @@ def render_maze(
         exit: tuple[int, int],
         print_path_flg: bool,
         width: int,
-        height: int
+        height: int,
+        wall_color: str = "\033[37m",  # 白
 ) -> None:
     """迷路を左上から1行ずつターミナルに表示する
 
@@ -41,18 +42,19 @@ def render_maze(
         print_path_flg: Trueなら経路を表示する
         width: 迷路の横幅
         height: 迷路の縦幅
+        wall_color: 壁の色を表すANSIエスケープシーケンス(デフォルトは白)
     """
     for y in range(height):
         for x in range(width):
             if MAZE[y][x] & Direction.NORTH:
-                print("+---", end="")
+                print(f"{wall_color}+---{RESET}", end="")
             else:
-                print("+   ", end="")
-        print("+")
+                print(f"{wall_color}+   {RESET}", end="")
+        print(f"{wall_color}+{RESET}")
 
         for x in range(width):
             if MAZE[y][x] & Direction.WEST:
-                print("|", end="")
+                print(f"{wall_color}|{RESET}", end="")
             else:
                 print(" ", end="")
 
@@ -66,8 +68,8 @@ def render_maze(
                 print(" * ", end="")
             else:
                 print("   ", end="")
-        print("|")
-    print_line(width)
+        print(f"{wall_color}|{RESET}")
+    print_line(width, wall_color)
 
 
 if __name__ == "__main__":

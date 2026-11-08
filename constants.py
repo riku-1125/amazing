@@ -10,3 +10,13 @@ class Direction(IntEnum):
     EAST = 2
     SOUTH = 4
     WEST = 8
+
+
+RESET = "\033[0m"
+WALL_COLORS = [
+    "\033[37m",   # 白
+    "\033[31m",   # 赤
+    "\033[32m",   # 緑
+    "\033[34m",   # 青
+    "\033[33m",   # 黄
+]
