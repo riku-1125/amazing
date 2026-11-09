@@ -5,20 +5,9 @@
 
 """
 from collections import deque
-from enum import Enum
+from constants import Direction
 
 from maze_gen import generate_maze
-
-
-class Direction(Enum):
-    """壁の方向を表すビットの値
-
-    マスの値は、閉じている壁の値の合計で表す。
-    """
-    NORTH = 1
-    EAST = 2
-    SOUTH = 4
-    WEST = 8
 
 
 def find_next_candidates(
@@ -41,23 +30,23 @@ def find_next_candidates(
     """
     wall_direction = maze[y][x]
 
-    if wall_direction >= Direction.WEST.value:
-        wall_direction -= Direction.WEST.value
+    if wall_direction >= Direction.WEST:
+        wall_direction -= Direction.WEST
     elif (y, x - 1) not in visited:
         candidates.append(((y, x - 1), path + "W"))
 
-    if wall_direction >= Direction.SOUTH.value:
-        wall_direction -= Direction.SOUTH.value
+    if wall_direction >= Direction.SOUTH:
+        wall_direction -= Direction.SOUTH
     elif (y + 1, x) not in visited:
         candidates.append(((y + 1, x), path + "S"))
 
-    if wall_direction >= Direction.EAST.value:
-        wall_direction -= Direction.EAST.value
+    if wall_direction >= Direction.EAST:
+        wall_direction -= Direction.EAST
     elif (y, x + 1) not in visited:
         candidates.append(((y, x + 1), path + "E"))
 
-    if wall_direction >= Direction.NORTH.value:
-        wall_direction -= Direction.NORTH.value
+    if wall_direction >= Direction.NORTH:
+        wall_direction -= Direction.NORTH
     elif (y - 1, x) not in visited:
         candidates.append(((y - 1, x), path + "N"))
 
