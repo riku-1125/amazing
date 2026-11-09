@@ -53,14 +53,22 @@ def set_path_flg(
 
 
 def main() -> None:
-    """迷路を生成し、経路を求めて画面に表示する"""
+    """迷路を生成し、経路を求めて画面に表示する
 
-    if len(sys.argv) != 2:
-        raise Exception("引数は一つだけ指定してください")
-    if sys.argv[1] != "config.txt":
-        raise Exception("引数の名称が正しくありません")
+    引数の誤り、設定ファイルの不備、迷路の生成やファイル出力の失敗があった場合は、
+    エラーメッセージを標準エラー出力に表示し、終了コード1で終了する。
+    """
 
-    conf = read_conf(sys.argv[1])
+    try:
+        if len(sys.argv) != 2:
+            raise Exception("引数は一つだけ指定してください")
+        conf = read_conf(sys.argv[1])
+        print(f"width: {conf.width}")
+
+    except (ValueError, OSError, Exception) as e:
+        print(e, file=sys.stderr)
+        sys.exit(1)
+
     width = conf.width
     height = conf.height
     entry = conf.entry
@@ -73,21 +81,31 @@ def main() -> None:
     color_idx = 0
     print_path_flg = False
 
-    maze = generate_maze(width, height, entry, exit, seed, perfect)
-    path = solve_maze(maze, entry, exit)
-    is_path = set_path_flg(path, entry, width, height)
-    write_maze(maze, entry, exit, path, output_file)
+    try:
+        maze = generate_maze(width, height, entry, exit, seed, perfect)
+        path = solve_maze(maze, entry, exit)
+        is_path = set_path_flg(path, entry, width, height)
+        write_maze(maze, entry, exit, path, output_file)
+    except (ValueError, OSError) as e:
+        print(e, file=sys.stderr)
+        sys.exit(1)
     render_maze(
         maze, is_path, entry, exit, print_path_flg, width, height
     )
 
     while True:
         if input_num == "1":
-            maze = generate_maze(width, height, entry, exit, seed, perfect)
-            path = solve_maze(maze, entry, exit)
-            is_path = set_path_flg(path, entry, width, height)
+            try:
+                maze = generate_maze(
+                    width, height, entry, exit, seed, perfect
+                )
+                path = solve_maze(maze, entry, exit)
+                is_path = set_path_flg(path, entry, width, height)
+                write_maze(maze, entry, exit, path, output_file)
+            except (ValueError, OSError) as e:
+                print(e, file=sys.stderr)
+                sys.exit(1)
             print_path_flg = False
-            write_maze(maze, entry, exit, path, output_file)
             render_maze(
                 maze, is_path, entry, exit, print_path_flg, width, height
             )

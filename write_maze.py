@@ -23,6 +23,9 @@ def write_maze(
         exit: 迷路のゴール
         path: スタートからゴールまでの経路
         output: 結果を出力する拡張子含むファイル名
+
+    Raises:
+        OSError: 出力ファイルを作成・書き込みできない場合
     """
     with open(output, "w", encoding="utf-8") as f:
         for row in MAZE:

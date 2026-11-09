@@ -12,6 +12,7 @@ def print_line(width: int, wall_color: str) -> None:
 
     Args:
         width: 迷路の横幅
+        wall_color: 壁の色を表すANSIエスケープシーケンス
     """
     line = "+"
 

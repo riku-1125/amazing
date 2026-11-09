@@ -167,7 +167,8 @@ def is_3x3_space(maze: list[list[int]], top: int, left: int) -> bool:
 
 def fix_3x3_space(maze: list[list[int]]) -> None:
     """3*3の空白が迷路に存在した時、その領域の中心の右側の位置の壁を立てる
-    渡されたmazeを直接変更する
+
+    渡されたmazeを直接変更する。
 
     Args:
         maze: 生成された迷路の盤面
