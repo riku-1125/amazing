@@ -8,9 +8,10 @@ from solve_maze import solve_maze
 
 def write_maze(
         MAZE: list[list[int]],
-        start: tuple[int, int],
-        end: tuple[int, int],
-        path: str
+        entry: tuple[int, int],
+        exit: tuple[int, int],
+        path: str,
+        output: str
 ) -> None:
     """迷路の情報をoutput_maze.txtに書き込む
 
@@ -18,23 +19,28 @@ def write_maze(
 
     Args:
         MAZE: 迷路の盤面
-        start: 迷路のスタート位置
-        end: 迷路のゴール
+        entry: 迷路のスタート位置
+        exit: 迷路のゴール
         path: スタートからゴールまでの経路
+        output: 結果を出力する拡張子含むファイル名
+
+    Raises:
+        OSError: 出力ファイルを作成・書き込みできない場合
     """
-    with open("output_maze.txt", "w", encoding="utf-8") as f:
+    with open(output, "w", encoding="utf-8") as f:
         for row in MAZE:
             line = "".join(f"{cell:X}" for cell in row)
             f.write(f"{line}\n")
 
-        # start
+        entry_x, entry_y = entry
+        exit_x, exit_y = exit
         f.write("\n")
-        f.write(f"start: {start}  #(x, y)\n")
-        f.write(f"end:   {end}  #(x, y)\n")
-        f.write(f"path: {path}\n")
+        f.write(f"{entry_x},{entry_y}\n")
+        f.write(f"{exit_x},{exit_y}\n")
+        f.write(f"{path}\n")
 
 
 if __name__ == "__main__":
     maze = generate_maze(10, 10, (0, 0), (9, 9), 42)
     path = solve_maze(maze, (0, 0), (9, 9))
-    write_maze(maze, (0, 0), (9, 9), path)
+    write_maze(maze, (0, 0), (9, 9), path, "maze.txt")

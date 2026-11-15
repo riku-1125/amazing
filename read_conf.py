@@ -15,7 +15,17 @@ class Config:
         output_file: str,
         seed: int | None = None,
     ) -> None:
-        """受け取った設定値を属性に保存する。"""
+        """受け取った設定値を属性に保存する。
+
+        Args:
+            width: 迷路の横幅
+            height: 迷路の縦幅
+            entry: 迷路のスタート位置(x, y)
+            exit: 迷路のゴール位置(x, y)
+            perfect: Trueなら完全迷路、Falseなら不完全迷路
+            output_file: 迷路を書き出すファイル名
+            seed: 乱数のシード値。Noneならランダム
+        """
         self.width = width
         self.height = height
         self.entry = entry
