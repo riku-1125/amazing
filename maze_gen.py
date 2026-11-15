@@ -287,6 +287,27 @@ def generate_maze(
 
 
 class MazeGenerator:
+    """Generate a maze and its shortest solution.
+
+        Example:
+            from maze_gen import MazeGenerator
+
+            generator = MazeGenerator(
+                width=10,
+                height=10,
+                entry=(0, 0),
+                exit=(9, 9),
+                seed=42,
+                perfect=True,
+            )
+
+            walls = generator.maze
+            path = generator.solve
+
+        Access cells with walls[y][x]. The path is a string of N, E, S,
+        and W moves from entry to exit. Use the same parameters and seed
+        to reproduce the maze.
+        """
     def gen_maze(self) -> list[list[int]]:
         self.maze = generate_maze(
             self.width,
