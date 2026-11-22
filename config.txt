@@ -1,0 +1,6 @@
+WIDTH=9
+HEIGHT=7
+ENTRY=0,0
+EXIT=1,1
+OUTPUT_FILE=check-loops-maze.txt
+PERFECT=False
