@@ -63,7 +63,6 @@ def main() -> None:
         if len(sys.argv) != 2:
             raise Exception("引数は一つだけ指定してください")
         conf = read_conf(sys.argv[1])
-        print(f"width: {conf.width}")
 
     except (ValueError, OSError, Exception) as e:
         print(e, file=sys.stderr)
@@ -138,7 +137,11 @@ def main() -> None:
         print("2. Show / Hide the shortest path")
         print("3. Rotate the wall colour")
         print("4. Quit")
-        input_num = input("Choice? (1-4): ")
+        try:
+            input_num = input("Choice? (1-4): ")
+        except (EOFError, KeyboardInterrupt):
+            print("\nDone.")
+            break
         print("")
 
 
