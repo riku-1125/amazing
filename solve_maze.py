@@ -7,8 +7,6 @@
 from collections import deque
 from constants import Direction
 
-from maze_gen import generate_maze
-
 
 def find_next_candidates(
         candidates: deque[tuple[tuple[int, int], str]],
@@ -89,6 +87,7 @@ def solve_maze(
 
 
 if __name__ == "__main__":
+    from maze_gen import generate_maze
     MAZE = generate_maze(10, 10, (0, 0), (9, 9))
     path = solve_maze(MAZE, (0, 0), (0, 2))
     print(f"path: {path}")
