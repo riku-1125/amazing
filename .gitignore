@@ -1,0 +1,7 @@
+config.txt
+maze_analyzer.py
+__pycache__/
+mypy.ini
+/build/
+/mazegen.egg-info/
+config.txt
