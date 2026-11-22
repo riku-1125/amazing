@@ -287,9 +287,9 @@ def generate_maze(
 
 
 class MazeGenerator:
-    """Generate a maze and its shortest solution.
+    """迷路と、その最短経路を生成するクラス
 
-        Example:
+        使用例:
             from maze_gen import MazeGenerator
 
             generator = MazeGenerator(
@@ -304,11 +304,23 @@ class MazeGenerator:
             walls = generator.maze
             path = generator.solve
 
-        Access cells with walls[y][x]. The path is a string of N, E, S,
-        and W moves from entry to exit. Use the same parameters and seed
-        to reproduce the maze.
+        マスにはwalls[y][x]でアクセスする。経路はスタートからゴールまでの
+        進む方向(N, E, S, W)をつなげた文字列。同じパラメータとシード値を
+        使えば、同じ迷路を再現できる。
         """
     def gen_maze(self) -> list[list[int]]:
+        """迷路と最短経路を生成する
+
+        生成した迷路をself.mazeに、スタートからゴールまでの最短経路を
+        self.solveに保存する。
+
+        Returns:
+            生成した迷路の二次元リスト。maze[y][x]でアクセスする。
+            各マスは閉じている壁の値の合計(北=1、東=2、南=4、西=8)。
+
+        Raises:
+            ValueError: スタートまたはゴールが"42"のマス上にある場合。
+        """
         self.maze = generate_maze(
             self.width,
             self.height,
@@ -330,6 +342,20 @@ class MazeGenerator:
         seed: int | None = None,
         perfect: bool = True
     ) -> None:
+        """パラメータを保存し、最初の迷路を生成する
+
+        Args:
+            width: 迷路の横幅
+            height: 迷路の縦幅
+            entry: 迷路のスタート位置(x, y)
+            exit: 迷路のゴール位置(x, y)
+            seed: 乱数のシード値。Noneなら毎回異なる迷路になり、
+                同じシード値なら同じ迷路が生成される
+            perfect: True->完全迷路、False->ループのある不完全迷路
+
+        Raises:
+            ValueError: スタートまたはゴールが"42"のマス上にある場合。
+        """
         self.width = width
         self.height = height
         self.entry = entry
