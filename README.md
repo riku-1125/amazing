@@ -18,6 +18,33 @@ Python 3.10以上が必要です。ターミナル版を実行するための追
 python3 a_maze_ing.py config.txt
 ```
 
+### Makefileを使う場合
+
+リポジトリ直下で `make` コマンドを実行できます。最初に仮想環境を作成し、
+必要な開発用ライブラリをインストールします。
+
+```sh
+make install
+```
+
+利用できる主なターゲットは次のとおりです。
+
+| コマンド | 操作 |
+| --- | --- |
+| `make install` | `.venv`を作成し、`requirements.txt`からライブラリをインストールする |
+| `make run` | `.venv`のPythonで`config.txt`を使って実行する |
+| `make debug` | `pdb`でデバッグ実行する |
+| `make clean` | `__pycache__`と`.mypy_cache`を削除する |
+| `make lint` | flake8と通常のmypyチェックを実行する |
+| `make lint-strict` | flake8と`mypy --strict`を実行する |
+
+通常の実行は次のとおりです。
+
+```sh
+make install
+make run
+```
+
 引数は設定ファイルへのパス一つです。別のファイル名でも実行できます。
 起動すると迷路が表示され、次のメニューを操作できます。
 
